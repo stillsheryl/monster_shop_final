@@ -7,7 +7,7 @@
 <%= link_to 'My Items', '/merchant/items' %>
 
 <% @merchant.discounts.each do |discount| %>
-  <p><%= "#{discount.percentage}% discount on #{discount.items_needed} or more items purchased" %></p>
+  <p><%= "#{discount.percentage.round}% discount on #{discount.items_needed} or more items purchased" %></p>
 <% end %>
 
 <section class="orders">

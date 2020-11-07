@@ -82,7 +82,7 @@ RSpec.describe 'Merchant Dashboard' do
       click_button "Create Discount"
 
       expect(current_path).to eq('/merchant')
-      expect(page).to have_content("5.0% discount on 5 or more items purchased")
+      expect(page).to have_content("5% discount on 5 or more items purchased")
     end
   end
 end
