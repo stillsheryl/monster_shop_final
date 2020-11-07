@@ -9,7 +9,7 @@ class Merchant::DiscountsController < Merchant::BaseController
     if discount.save
       redirect_to "/merchant"
     else
-      generate_flash(discount)
+      flash[:message] = "Please fill in both fields to create your bulk discount."
       render :new
     end
   end
