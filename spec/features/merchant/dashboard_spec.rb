@@ -95,7 +95,35 @@ RSpec.describe 'Merchant Dashboard' do
       click_button "Create Discount"
 
       expect(current_path).to eq('/merchant/discounts')
-      expect(page).to have_content("Please fill in both fields to create your bulk discount.")
+      expect(page).to have_content("Items needed can't be blank and Items needed is not a number")
+    end
+
+    it "I will get an error message if I do not fill in percentage with a number between 1-99" do
+      visit '/merchant'
+
+      click_link "Create Bulk Discount"
+
+      fill_in "Percentage", with: 0
+      fill_in "Items needed", with: 5
+
+      click_button "Create Discount"
+
+      expect(current_path).to eq('/merchant/discounts')
+      expect(page).to have_content("The percentage must be between 1 and 99")
+    end
+
+    it "I will get an error message if I do not fill in Items Needed with a number greater than 0" do
+      visit '/merchant'
+
+      click_link "Create Bulk Discount"
+
+      fill_in "Percentage", with: 5
+      fill_in "Items needed", with: 0
+
+      click_button "Create Discount"
+
+      expect(current_path).to eq('/merchant/discounts')
+      expect(page).to have_content("Items needed must be greater than 0")
     end
   end
 end
