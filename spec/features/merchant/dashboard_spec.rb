@@ -62,5 +62,13 @@ RSpec.describe 'Merchant Dashboard' do
 
       expect(current_path).to eq("/merchant/orders/#{@order_2.id}")
     end
+
+    it "I see a link to add a bulk discount which takes me to the create a new bulk discount form" do
+      visit '/merchant'
+
+      click_link "Create Bulk Discount"
+
+      expect(current_path).to eq('/merchant/discounts/new')
+    end
   end
 end
