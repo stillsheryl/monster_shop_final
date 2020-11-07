@@ -84,5 +84,18 @@ RSpec.describe 'Merchant Dashboard' do
       expect(current_path).to eq('/merchant')
       expect(page).to have_content("5% discount on 5 or more items purchased")
     end
+
+    it "I will get an error message if I do not fill in both fields" do
+      visit '/merchant'
+
+      click_link "Create Bulk Discount"
+
+      fill_in "Percentage", with: 5
+
+      click_button "Create Discount"
+
+      expect(current_path).to eq('/merchant/discounts')
+      expect(page).to have_content("Please fill in both fields to create your bulk discount.")
+    end
   end
 end
