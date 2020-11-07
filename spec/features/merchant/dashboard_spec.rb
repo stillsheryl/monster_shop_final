@@ -62,5 +62,68 @@ RSpec.describe 'Merchant Dashboard' do
 
       expect(current_path).to eq("/merchant/orders/#{@order_2.id}")
     end
+
+    it "I see a link to add a bulk discount which takes me to the create a new bulk discount form" do
+      visit '/merchant'
+
+      click_link "Create Bulk Discount"
+
+      expect(current_path).to eq('/merchant/discounts/new')
+    end
+
+    it "I fill in the form and am redirected to the dashboard, where I see the new discount listed" do
+      visit '/merchant'
+
+      click_link "Create Bulk Discount"
+
+      fill_in "Percentage", with: 5
+      fill_in "Items needed", with: 5
+
+      click_button "Create Discount"
+
+      expect(current_path).to eq('/merchant')
+      expect(page).to have_content("5% discount on 5 or more items purchased")
+    end
+
+    it "I will get an error message if I do not fill in both fields" do
+      visit '/merchant'
+
+      click_link "Create Bulk Discount"
+
+      fill_in "Percentage", with: 5
+
+      click_button "Create Discount"
+
+      expect(current_path).to eq('/merchant/discounts')
+      expect(page).to have_content("Items needed can't be blank and Items needed is not a number")
+    end
+
+    it "I will get an error message if I do not fill in percentage with a number between 1-99" do
+      visit '/merchant'
+
+      click_link "Create Bulk Discount"
+
+      fill_in "Percentage", with: 0
+      fill_in "Items needed", with: 5
+
+      click_button "Create Discount"
+
+      expect(current_path).to eq('/merchant/discounts')
+      expect(page).to have_content("The percentage must be between 1 and 99")
+    end
+
+    it "I will get an error message if I do not fill in Items Needed with a number greater than 0" do
+      visit '/merchant'
+
+      click_link "Create Bulk Discount"
+
+      fill_in "Percentage", with: 5
+      fill_in "Items needed", with: 0
+
+      click_button "Create Discount"
+
+      expect(current_path).to eq('/merchant/discounts')
+      expect(page).to have_content("Items needed must be greater than 0")
+    end
   end
 end

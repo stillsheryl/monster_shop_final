@@ -2,7 +2,13 @@
 <p><%= @merchant.address %></p>
 <p><%= @merchant.city %> <%= @merchant.state %> <%= @merchant.zip %></p>
 
+<%= link_to 'Create Bulk Discount', new_merchant_discount_path %><br>
+
 <%= link_to 'My Items', '/merchant/items' %>
+
+<% @merchant.discounts.each do |discount| %>
+  <p><%= "#{discount.percentage.round}% discount on #{discount.items_needed} or more items purchased" %></p>
+<% end %>
 
 <section class="orders">
   <% @merchant.pending_orders.each do |order| %>
