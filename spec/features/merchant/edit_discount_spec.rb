@@ -45,5 +45,31 @@ RSpec.describe 'Update Discount Page' do
       expect(find_field('Percentage').value).to eq "5"
       expect(find_field('Items needed').value).to eq "5"
     end
+
+    it "gives an error if missing information" do
+      visit '/merchant'
+
+      click_link("Edit Discount")
+
+      fill_in "Percentage", with: 10
+      fill_in "Items needed", with: 0
+
+      click_button "Update Discount"
+
+      expect(page).to have_content("Items needed must be greater than 0")
+    end
+
+    it "gives an success message if information entered correctly and is updated" do
+      visit '/merchant'
+
+      click_link("Edit Discount")
+
+      fill_in "Percentage", with: 10
+      fill_in "Items needed", with: 10
+
+      click_button "Update Discount"
+
+      expect(page).to have_content("Discount Updated.")
+    end
   end
 end
