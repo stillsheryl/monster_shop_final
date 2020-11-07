@@ -9,7 +9,8 @@
 <ul>
   <% @merchant.discounts.each do |discount| %>
   <li id="discount-<%= discount.id %>"><%= "#{discount.percentage.round}% discount on #{discount.items_needed} or more items purchased" %><br>
-  <%= link_to "Edit Discount", "/merchant/discounts/#{discount.id}/edit" %></li><br>
+    <%= link_to "Edit Discount", "/merchant/discounts/#{discount.id}/edit" %><br>
+  <%= link_to "Delete Discount", "/merchant/discounts/#{discount.id}", method: :delete %></li><br>
   <% end %>
 </ul>
 
