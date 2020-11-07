@@ -27,5 +27,18 @@ RSpec.describe 'Delete Discount Page' do
       expect(page).to_not have_content("5% discount on 5 or more items purchased")
       expect(page).to have_content("10% discount on 10 or more items purchased")
     end
+
+    it 'I see a message that the delete was successful' do
+      visit '/merchant'
+
+      within("#discount-#{@discount_1.id}") do
+        expect(page).to have_content("5% discount on 5 or more items purchased")
+        click_link("Delete Discount")
+      end
+
+      expect(current_path).to eq('/merchant')
+
+      expect(page).to have_content("Your discount was deleted.")
+    end
   end
 end
