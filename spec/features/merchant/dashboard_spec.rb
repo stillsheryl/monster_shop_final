@@ -70,5 +70,19 @@ RSpec.describe 'Merchant Dashboard' do
 
       expect(current_path).to eq('/merchant/discounts/new')
     end
+
+    it "I fill in the form and am redirected to the dashboard, where I see the new discount listed" do
+      visit '/merchant'
+
+      click_link "Create Bulk Discount"
+
+      fill_in "Percentage", with: 5
+      fill_in "Items needed", with: 5
+
+      click_button "Create Discount"
+
+      expect(current_path).to eq('/merchant')
+      expect(page).to have_content("5.0% discount on 5 or more items purchased")
+    end
   end
 end
