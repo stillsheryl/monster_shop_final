@@ -6,9 +6,12 @@
 
 <%= link_to 'My Items', '/merchant/items' %>
 
-<% @merchant.discounts.each do |discount| %>
-  <p><%= "#{discount.percentage.round}% discount on #{discount.items_needed} or more items purchased" %></p>
-<% end %>
+<ul>
+  <% @merchant.discounts.each do |discount| %>
+  <li id="discount-<%= discount.id %>"><%= "#{discount.percentage.round}% discount on #{discount.items_needed} or more items purchased" %><br>
+  <%= link_to "Edit Discount", "/merchant/discounts/#{discount.id}/edit" %></li><br>
+  <% end %>
+</ul>
 
 <section class="orders">
   <% @merchant.pending_orders.each do |order| %>
