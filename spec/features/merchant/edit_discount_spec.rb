@@ -31,5 +31,19 @@ RSpec.describe 'Update Discount Page' do
       visit '/merchant'
       expect(page).to have_content("10% discount on 10 or more items purchased")
     end
+
+    it "prefills fields with existing data" do
+      visit '/merchant'
+
+      within("#discount-#{@discount.id}") do
+        expect(page).to have_content("5% discount on 5 or more items purchased")
+        click_link("Edit Discount")
+      end
+
+      expect(current_path).to eq("/merchant/discounts/#{@discount.id}/edit")
+
+      expect(find_field('Percentage').value).to eq "5"
+      expect(find_field('Items needed').value).to eq "5"
+    end
   end
 end
