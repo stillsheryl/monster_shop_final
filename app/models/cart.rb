@@ -43,4 +43,12 @@ class Cart
   def limit_reached?(item_id)
     count_of(item_id) == Item.find(item_id).inventory
   end
+
+  def items_needed_for_discount?(item_id)
+    @contents[item_id.to_s] >= Item.find(item_id).merchant.discounts.pluck(:items_needed).first
+  end
+
+  def discounted_subtotal_of(item_id)
+    @contents[item_id.to_s] * Item.find(item_id).apply_discount(@contents[item_id.to_s])
+  end
 end

@@ -6,6 +6,8 @@ RSpec.describe Item do
     it {should have_many :order_items}
     it {should have_many(:orders).through(:order_items)}
     it {should have_many :reviews}
+    it {should have_many :discount_items}
+    it {should have_many(:discounts).through(:discount_items)}
   end
 
   describe 'Validations' do
@@ -36,6 +38,16 @@ RSpec.describe Item do
 
     it '.average_rating' do
       expect(@ogre.average_rating.round(2)).to eq(3.00)
+    end
+
+    it '.apply_discount' do
+      discount = @megan.discounts.create(percentage: 5, items_needed: 5)
+      discount = @megan.discounts.create(percentage: 10, items_needed: 10)
+      discount = @megan.discounts.create(percentage: 7, items_needed: 7)
+
+      expect(@ogre.apply_discount(10)).to eq(18.00)
+      expect(@ogre.apply_discount(5)).to eq(19.00)
+      expect(@ogre.apply_discount(7)).to eq(18.60)
     end
   end
 

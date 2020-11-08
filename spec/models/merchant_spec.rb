@@ -57,5 +57,13 @@ RSpec.describe Merchant do
     it '.order_items_by_order' do
       expect(@megan.order_items_by_order(@order_1.id)).to eq([@order_item_1])
     end
+
+    it ".discount?" do
+      discount = @brian.discounts.create(percentage: 5, items_needed: 5)
+
+      expect(@megan.discount?).to eq(false)
+      expect(@brian.discount?).to eq(true)
+      expect(@sal.discount?).to eq(false)
+    end
   end
 end
