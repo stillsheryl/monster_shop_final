@@ -47,4 +47,8 @@ class Cart
   def items_needed_for_discount?(item_id)
     @contents[item_id.to_s] >= Item.find(item_id).merchant.discounts.pluck(:items_needed).first
   end
+
+  def discounted_subtotal_of(item_id)
+    @contents[item_id.to_s] * Item.find(item_id).apply_discount(@contents[item_id.to_s])
+  end
 end
