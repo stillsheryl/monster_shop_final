@@ -46,7 +46,6 @@ RSpec.describe 'Add Discount to Items' do
           end
         end
 
-        save_and_open_page
         within "#item-#{@ogre.id}" do
           expect(page).to have_content("Subtotal: $180.00")
         end
