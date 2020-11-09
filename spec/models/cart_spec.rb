@@ -66,10 +66,11 @@ RSpec.describe Cart do
 
     it '.items_needed_for_discount?(amount_in_cart)' do
       discount = @megan.discounts.create(percentage: 5, items_needed: 5)
+      discount = @megan.discounts.create(percentage: 3, items_needed: 3)
 
       expect(@cart.items_needed_for_discount?(@ogre.id)).to eq(false)
 
-      4.times do @cart.add_item(@ogre.id.to_s)
+      2.times do @cart.add_item(@ogre.id.to_s)
       end
 
       expect(@cart.items_needed_for_discount?(@ogre.id)).to eq(true)
