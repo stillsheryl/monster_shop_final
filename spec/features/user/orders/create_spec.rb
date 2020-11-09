@@ -73,4 +73,49 @@ RSpec.describe 'Create Order' do
       expect(current_path).to eq(login_path)
     end
   end
+
+  describe 'As a Registered User' do
+    before :each do
+      @megan = Merchant.create!(name: 'Megans Marmalades', address: '123 Main St', city: 'Denver', state: 'CO', zip: 80218)
+      @brian = Merchant.create!(name: 'Brians Bagels', address: '125 Main St', city: 'Denver', state: 'CO', zip: 80218)
+      @ogre = @megan.items.create!(name: 'Ogre', description: "I'm an Ogre!", price: 20, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaLM_vbg2Rh-mZ-B4t-RSU9AmSfEEq_SN9xPP_qrA2I6Ftq_D9Qw', active: true, inventory: 54 )
+      @giant = @megan.items.create!(name: 'Giant', description: "I'm a Giant!", price: 50, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaLM_vbg2Rh-mZ-B4t-RSU9AmSfEEq_SN9xPP_qrA2I6Ftq_D9Qw', active: true, inventory: 20 )
+      @hippo = @brian.items.create!(name: 'Hippo', description: "I'm a Hippo!", price: 50, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaLM_vbg2Rh-mZ-B4t-RSU9AmSfEEq_SN9xPP_qrA2I6Ftq_D9Qw', active: true, inventory: 19 )
+      @user = User.create!(name: 'Megan', address: '123 Main St', city: 'Denver', state: 'CO', zip: 80218, email: 'megan@example.com', password: 'securepassword')
+      allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@user)
+      @discount_1 = @megan.discounts.create(percentage: 5, items_needed: 5)
+      @discount_1 = @megan.discounts.create(percentage: 10, items_needed: 10)
+    end
+
+    it 'I can click a link to get to create an order and the final discounted prices should appear on the orders show page.' do
+      visit item_path(@ogre)
+      click_button 'Add to Cart'
+      visit item_path(@hippo)
+      click_button 'Add to Cart'
+      visit item_path(@giant)
+      click_button 'Add to Cart'
+
+      visit '/cart'
+
+      within "#item-#{@giant.id}" do
+        9.times do click_button('More of This!')
+        end
+      end
+
+      within "#item-#{@ogre.id}" do
+        4.times do click_button('More of This!')
+        end
+      end
+
+      click_button 'Check Out'
+
+      order = Order.last
+
+      expect(current_path).to eq('/profile/orders')
+
+      within "#order-#{order.id}" do
+        expect(page).to have_content("Total: $595.00")
+      end
+    end
+  end
 end
