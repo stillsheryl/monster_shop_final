@@ -61,6 +61,16 @@ RSpec.describe 'Item Index Page' do
       expect(page).to_not have_css("#item-#{@nessie.id}")
     end
 
+    it "I see the default image if none is provided when item is created" do
+      toy = @megan.items.create!(name: 'Toy', description: "I'm a toy!", price: 50, active: true, inventory: 3 )
+      
+      visit '/items'
+
+      within "#item-#{toy.id}" do
+        expect(page).to have_css("img[src*='https://images.unsplash.com/photo-1604917018135-18fe420b2ce4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=300&q=80']")
+      end
+    end
+
     it 'I see the most and least popular items' do
       visit items_path
 
