@@ -7,7 +7,7 @@ RSpec.describe 'Merchant Dashboard' do
       @merchant_2 = Merchant.create!(name: 'Brians Bagels', address: '125 Main St', city: 'Denver', state: 'CO', zip: 80218)
       @m_user = @merchant_1.users.create(name: 'Megan', address: '123 Main St', city: 'Denver', state: 'CO', zip: 80218, email: 'megan@example.com', password: 'securepassword')
       @ogre = @merchant_1.items.create!(name: 'Ogre', description: "I'm an Ogre!", price: 20.25, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaLM_vbg2Rh-mZ-B4t-RSU9AmSfEEq_SN9xPP_qrA2I6Ftq_D9Qw', active: true, inventory: 5 )
-      @giant = @merchant_1.items.create!(name: 'Giant', description: "I'm a Giant!", price: 50, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaLM_vbg2Rh-mZ-B4t-RSU9AmSfEEq_SN9xPP_qrA2I6Ftq_D9Qw', active: true, inventory: 3 )
+      @giant = @merchant_1.items.create!(name: 'Giant', description: "I'm a Giant!", price: 50, active: true, inventory: 3 )
       @hippo = @merchant_2.items.create!(name: 'Hippo', description: "I'm a Hippo!", price: 50, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaLM_vbg2Rh-mZ-B4t-RSU9AmSfEEq_SN9xPP_qrA2I6Ftq_D9Qw', active: true, inventory: 1 )
       @order_1 = @m_user.orders.create!(status: "pending")
       @order_2 = @m_user.orders.create!(status: "pending")
@@ -124,6 +124,15 @@ RSpec.describe 'Merchant Dashboard' do
 
       expect(current_path).to eq('/merchant/discounts')
       expect(page).to have_content("Items needed must be greater than 0")
+    end
+
+    it "shows a to do list with a suggestion to replace items that have a placeholder image" do
+      visit '/merchant'
+
+      expect(page).to have_content("To Do:")
+      click_link(@giant.name)
+
+      expect(current_path).to eq("/merchant/items/#{@giant.id}/edit")
     end
   end
 end
