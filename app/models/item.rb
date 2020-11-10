@@ -34,4 +34,13 @@ class Item < ApplicationRecord
   def apply_discount(total_items_in_cart)
     price - (price * (merchant.discounts.where("items_needed <= #{total_items_in_cart}").order(items_needed: :desc).pluck(:percentage).first * 0.01))
   end
+
+  def image_for_item(item_id)
+    item = Item.find(item_id)
+    if item.image?
+      item.image
+    else
+      item.image = "https://thumbs.dreamstime.com/z/no-image-available-icon-photo-camera-flat-vector-illustration-132483097.jpg"
+    end
+  end
 end
