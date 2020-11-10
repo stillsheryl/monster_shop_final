@@ -8,7 +8,6 @@ class Item < ApplicationRecord
 
   validates_presence_of :name,
                         :description,
-                        :image,
                         :price,
                         :inventory
 
@@ -34,5 +33,13 @@ class Item < ApplicationRecord
 
   def apply_discount(total_items_in_cart)
     price - (price * (merchant.discounts.where("items_needed <= #{total_items_in_cart}").order(items_needed: :desc).pluck(:percentage).first * 0.01))
+  end
+
+  def image_for_item
+    if self.image?
+      self.image
+    else
+      self.image = "https://images.unsplash.com/photo-1604917018135-18fe420b2ce4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=300&q=80"
+    end
   end
 end

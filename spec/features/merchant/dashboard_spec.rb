@@ -3,11 +3,39 @@ require 'rails_helper'
 RSpec.describe 'Merchant Dashboard' do
   describe 'As an employee of a merchant' do
     before :each do
+      @bike_shop = Merchant.create(name: "Brian's Bike Shop", address: '125 Doggo St.', city: 'Denver', state: 'CO', zip: 80210)
+      @sally = User.create!(name: 'Sally Peach', address: '432 Grove St.', city: 'Denver', state: 'CO', zip: 80205, email: 'sallypeach.com', password: 'password', role: 1, merchant_id: @bike_shop.id)
+      allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@sally)
+    end
+      it "shows discounts, pending orders, and add image headers only when there is data for each" do
+        visit '/merchant'
+
+        expect(page).to_not have_content("My Discounts:")
+        expect(page).to_not have_content("Pending Orders:")
+        expect(page).to_not have_content("Add image to items using the default image:")
+
+        order = @sally.orders.create!(status: "pending")
+        ogre = @bike_shop.items.create!(name: 'Ogre', description: "I'm an Ogre!", price: 20.25, active: true, inventory: 5 )
+        order_item = order.order_items.create!(item: ogre, price: ogre.price, quantity: 2, fulfilled: false)
+        discount = @bike_shop.discounts.create!(percentage: 5, items_needed: 5)
+
+        @bike_shop.reload
+        @sally.reload
+        visit '/merchant'
+
+        expect(page).to have_content("My Discounts:")
+        expect(page).to have_content("Pending Orders:")
+        expect(page).to have_content("Add image to items using the default image:")
+      end
+  end
+
+  describe 'As an employee of a merchant' do
+    before :each do
       @merchant_1 = Merchant.create!(name: 'Megans Marmalades', address: '123 Main St', city: 'Denver', state: 'CO', zip: 80218)
       @merchant_2 = Merchant.create!(name: 'Brians Bagels', address: '125 Main St', city: 'Denver', state: 'CO', zip: 80218)
-      @m_user = @merchant_1.users.create(name: 'Megan', address: '123 Main St', city: 'Denver', state: 'CO', zip: 80218, email: 'megan@example.com', password: 'securepassword')
+      @m_user = @merchant_1.users.create!(name: 'Megan', address: '123 Main St', city: 'Denver', state: 'CO', zip: 80218, email: 'megan@example.com', password: 'thisisasecurepassword')
       @ogre = @merchant_1.items.create!(name: 'Ogre', description: "I'm an Ogre!", price: 20.25, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaLM_vbg2Rh-mZ-B4t-RSU9AmSfEEq_SN9xPP_qrA2I6Ftq_D9Qw', active: true, inventory: 5 )
-      @giant = @merchant_1.items.create!(name: 'Giant', description: "I'm a Giant!", price: 50, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaLM_vbg2Rh-mZ-B4t-RSU9AmSfEEq_SN9xPP_qrA2I6Ftq_D9Qw', active: true, inventory: 3 )
+      @giant = @merchant_1.items.create!(name: 'Giant', description: "I'm a Giant!", price: 50, active: true, inventory: 3 )
       @hippo = @merchant_2.items.create!(name: 'Hippo', description: "I'm a Hippo!", price: 50, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaLM_vbg2Rh-mZ-B4t-RSU9AmSfEEq_SN9xPP_qrA2I6Ftq_D9Qw', active: true, inventory: 1 )
       @order_1 = @m_user.orders.create!(status: "pending")
       @order_2 = @m_user.orders.create!(status: "pending")
@@ -124,6 +152,15 @@ RSpec.describe 'Merchant Dashboard' do
 
       expect(current_path).to eq('/merchant/discounts')
       expect(page).to have_content("Items needed must be greater than 0")
+    end
+
+    it "shows a to do list with a suggestion to replace items that have a placeholder image" do
+      visit '/merchant'
+
+      expect(page).to have_content("To Do:")
+      click_link(@giant.name)
+
+      expect(current_path).to eq("/merchant/items/#{@giant.id}/edit")
     end
   end
 end

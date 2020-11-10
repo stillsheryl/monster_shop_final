@@ -13,7 +13,6 @@ RSpec.describe Item do
   describe 'Validations' do
     it {should validate_presence_of :name}
     it {should validate_presence_of :description}
-    it {should validate_presence_of :image}
     it {should validate_presence_of :price}
     it {should validate_presence_of :inventory}
   end
@@ -23,6 +22,7 @@ RSpec.describe Item do
       @megan = Merchant.create!(name: 'Megans Marmalades', address: '123 Main St', city: 'Denver', state: 'CO', zip: 80218)
       @ogre = @megan.items.create!(name: 'Ogre', description: "I'm an Ogre!", price: 20, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaLM_vbg2Rh-mZ-B4t-RSU9AmSfEEq_SN9xPP_qrA2I6Ftq_D9Qw', active: true, inventory: 5 )
       @giant = @megan.items.create!(name: 'Giant', description: "I'm a Giant!", price: 20, image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaLM_vbg2Rh-mZ-B4t-RSU9AmSfEEq_SN9xPP_qrA2I6Ftq_D9Qw', active: true, inventory: 5 )
+      @donut = @megan.items.create!(name: 'Donut', description: "I'm a circle!", price: 5, active: true, inventory: 24 )
       @review_1 = @ogre.reviews.create(title: 'Great!', description: 'This Ogre is Great!', rating: 5)
       @review_2 = @ogre.reviews.create(title: 'Meh.', description: 'This Ogre is Mediocre', rating: 3)
       @review_3 = @ogre.reviews.create(title: 'EW', description: 'This Ogre is Ew', rating: 1)
@@ -48,6 +48,11 @@ RSpec.describe Item do
       expect(@ogre.apply_discount(10)).to eq(18.00)
       expect(@ogre.apply_discount(5)).to eq(19.00)
       expect(@ogre.apply_discount(7)).to eq(18.60)
+    end
+
+    it ".image_for_item" do
+      expect(@ogre.image_for_item).to eq(@ogre.image)
+      expect(@donut.image_for_item).to eq("https://images.unsplash.com/photo-1604917018135-18fe420b2ce4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=300&q=80")
     end
   end
 
