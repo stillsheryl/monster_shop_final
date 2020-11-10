@@ -13,6 +13,7 @@ RSpec.describe 'Merchant Dashboard' do
         expect(page).to_not have_content("My Discounts:")
         expect(page).to_not have_content("Pending Orders:")
         expect(page).to_not have_content("Add image to items using the default image:")
+        expect(page).to have_content("Great job! All your orders are currently fulfilled!")
 
         order = @sally.orders.create!(status: "pending")
         ogre = @bike_shop.items.create!(name: 'Ogre', description: "I'm an Ogre!", price: 20.25, active: true, inventory: 5 )
@@ -25,7 +26,8 @@ RSpec.describe 'Merchant Dashboard' do
 
         expect(page).to have_content("My Discounts:")
         expect(page).to have_content("Pending Orders:")
-        expect(page).to have_content("Add image to items using the default image:")
+        expect(page).to have_content("Add image to items currently using the default image:")
+        expect(page).to have_content("You have 1 unfulfilled orders worth $40.50")
       end
   end
 
@@ -161,6 +163,12 @@ RSpec.describe 'Merchant Dashboard' do
       click_link(@giant.name)
 
       expect(current_path).to eq("/merchant/items/#{@giant.id}/edit")
+    end
+
+    it "a statistic about unfulfilled items and the revenue impact. eg, 'You have 5 unfulfilled orders worth $752.86'" do
+      visit '/merchant'
+
+      expect(page).to have_content("You have 2 unfulfilled orders worth $140.50")
     end
   end
 end
