@@ -37,4 +37,8 @@ class Merchant < ApplicationRecord
   def discount?
     self.discounts != []
   end
+
+  def default_image_items
+    self.items.where(image: nil)
+  end
 end
