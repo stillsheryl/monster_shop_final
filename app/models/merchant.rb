@@ -30,6 +30,14 @@ class Merchant < ApplicationRecord
     orders.where(status: 'pending')
   end
 
+  def pending_orders_count
+    orders.where(status: 'pending').count
+  end
+
+  def pending_orders_revenue
+    order_items.joins("JOIN orders ON order_items.order_id = orders.id").where("orders.status = '0'").sum("order_items.price * order_items.quantity")
+  end
+
   def order_items_by_order(order_id)
     order_items.where(order_id: order_id)
   end

@@ -29,10 +29,12 @@ RSpec.describe Merchant do
       @order_1 = @user_1.orders.create!
       @order_2 = @user_2.orders.create!(status: 1)
       @order_3 = @user_2.orders.create!(status: 1)
+      @order_4 = @user_2.orders.create!
       @order_item_1 = @order_1.order_items.create!(item: @ogre, price: @ogre.price, quantity: 2)
       @order_item_2 = @order_1.order_items.create!(item: @hippo, price: @hippo.price, quantity: 3)
       @order_item_3 = @order_2.order_items.create!(item: @giant, price: @hippo.price, quantity: 2)
       @order_item_4 = @order_2.order_items.create!(item: @ogre, price: @hippo.price, quantity: 2)
+      @order_item_5 = @order_4.order_items.create!(item: @hippo, price: @hippo.price, quantity: 1)
     end
 
     it '.item_count' do
@@ -52,6 +54,16 @@ RSpec.describe Merchant do
 
     it '.pending_orders' do
       expect(@megan.pending_orders).to eq([@order_1])
+    end
+
+    it '.pending_orders_count' do
+      expect(@megan.pending_orders_count).to eq(1)
+      expect(@brian.pending_orders_count).to eq(2)
+    end
+
+    it ".pending_orders_revenue" do
+      expect(@megan.pending_orders_revenue.round(2)).to eq(40.50)
+      expect(@brian.pending_orders_revenue.round(2)).to eq(200.00)
     end
 
     it '.order_items_by_order' do

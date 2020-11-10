@@ -7,8 +7,13 @@
 <%= link_to 'My Items', '/merchant/items' %>
 
 <h3>To Do:</h3>
+<% if @merchant.pending_orders != [] %>
+  <p>You have <%= @merchant.pending_orders_count %> unfulfilled orders worth <%= number_to_currency(@merchant.pending_orders_revenue) %></p>
+<% else %>
+  <p>Great job! All your orders are currently fulfilled!</p>
+<% end %>
 <% if @merchant.default_image_items != [] %>
-  <h4>Add image to items using the default image:</h4>
+  <h4>Add image to items currently using the default image:</h4>
   <ul>
     <% @merchant.default_image_items.each do |item| %>
     <li><%= link_to item.name, "/merchant/items/#{item.id}/edit" %></li>
