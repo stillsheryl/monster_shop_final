@@ -12,7 +12,7 @@
   <% cart.items.each do |item| %>
     <section id='item-<%= item.id%>'>
       <h2><%= link_to item.name, "/items/#{item.id}" %></h2>
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaLM_vbg2Rh-mZ-B4t-RSU9AmSfEEq_SN9xPP_qrA2I6Ftq_D9Qw">
+      <img src="<%= item.image_for_item %>">
       <% if item.merchant.discount? && cart.items_needed_for_discount?(item.id) %>
         <p>New Discounted Price: <%= number_to_currency(item.apply_discount(cart.count_of(item.id))) %></p>
         <p class="fullprice">Price: <%= number_to_currency(item.price) %></p>
