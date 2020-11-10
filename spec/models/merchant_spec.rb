@@ -61,6 +61,11 @@ RSpec.describe Merchant do
       expect(@brian.pending_orders_count).to eq(2)
     end
 
+    it ".pending_orders_revenue" do
+      expect(@megan.pending_orders_revenue.round(2)).to eq(40.50)
+      expect(@brian.pending_orders_revenue.round(2)).to eq(200.00)
+    end
+
     it '.order_items_by_order' do
       expect(@megan.order_items_by_order(@order_1.id)).to eq([@order_item_1])
     end
