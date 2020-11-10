@@ -6,6 +6,19 @@
 
 <%= link_to 'My Items', '/merchant/items' %>
 
+<h3>To Do:</h3>
+<% if @merchant.default_image_items != [] %>
+  <h4>Add image to items using the default image:</h4>
+  <ul>
+    <% @merchant.default_image_items.each do |item| %>
+    <li><%= link_to item.name, "/merchant/items/#{item.id}/edit" %></li>
+    <% end %>
+  </ul>
+<% end %>
+
+<% if @merchant.discounts != [] %>
+  <h3>My Discounts:</h3>
+<% end %>
 <ul>
   <% @merchant.discounts.each do |discount| %>
   <li id="discount-<%= discount.id %>"><%= "#{discount.percentage.round}% discount on #{discount.items_needed} or more items purchased" %><br>
@@ -14,6 +27,9 @@
   <% end %>
 </ul>
 
+<% if @merchant.pending_orders != [] %>
+  <h3>Pending Orders:</h3>
+<% end %>
 <section class="orders">
   <% @merchant.pending_orders.each do |order| %>
     <section id="order-<%= order.id %>">
