@@ -40,7 +40,7 @@ class Item < ApplicationRecord
     if item.image?
       item.image
     else
-      item.image = "https://thumbs.dreamstime.com/z/no-image-available-icon-photo-camera-flat-vector-illustration-132483097.jpg"
+      item.image = "https://images.unsplash.com/photo-1604917018135-18fe420b2ce4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=300&q=80"
     end
   end
 end
