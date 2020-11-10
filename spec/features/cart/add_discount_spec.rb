@@ -112,6 +112,25 @@ RSpec.describe 'Add Discount to Items' do
           expect(page).to have_content("Subtotal: $3.00")
         end
       end
+
+      it "shows price before discount striked out so visitor can see difference in discount price" do
+        visit item_path(@ogre)
+        click_button 'Add to Cart'
+
+        visit '/cart'
+
+        within "#item-#{@ogre.id}" do
+          4.times do click_button('More of This!')
+          end
+        end
+
+        within "#item-#{@ogre.id}" do
+          expect(page).to have_content("New Discounted Price: $19.00")
+          within  ".fullprice" do
+            expect(page).to have_content("Price: $20.00")
+          end
+        end
+      end
     end
   end
 end
