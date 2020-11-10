@@ -51,8 +51,8 @@ RSpec.describe Item do
     end
 
     it ".image_for_item" do
-      expect(@ogre.image_for_item(@ogre.id)).to eq(@ogre.image)
-      expect(@donut.image_for_item(@donut.id)).to eq("https://images.unsplash.com/photo-1604917018135-18fe420b2ce4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=300&q=80")
+      expect(@ogre.image_for_item).to eq(@ogre.image)
+      expect(@donut.image_for_item).to eq("https://images.unsplash.com/photo-1604917018135-18fe420b2ce4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=300&q=80")
     end
   end
 
