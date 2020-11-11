@@ -27,11 +27,11 @@ class Merchant < ApplicationRecord
   end
 
   def pending_orders
-    orders.where(status: 'pending')
+    orders.where(status: 'pending').distinct
   end
 
   def pending_orders_count
-    orders.where(status: 'pending').count
+    orders.where(status: 'pending').distinct.count
   end
 
   def pending_orders_revenue
@@ -49,6 +49,6 @@ class Merchant < ApplicationRecord
   end
 
   def default_image_items
-    self.items.where(image: nil)
+    self.items.where(image: nil).or(self.items.where(image: ''))
   end
 end
