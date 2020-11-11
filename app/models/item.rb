@@ -32,7 +32,10 @@ class Item < ApplicationRecord
   end
 
   def apply_discount(total_items_in_cart)
-    price - (price * (merchant.discounts.where("items_needed <= #{total_items_in_cart}").order(items_needed: :desc).pluck(:percentage).first * 0.01))
+    price - (price * (merchant.discounts.where("items_needed <= #{total_items_in_cart}")
+                              .order(items_needed: :desc)
+                              .pluck(:percentage)
+                              .first * 0.01))
   end
 
   def image_for_item
